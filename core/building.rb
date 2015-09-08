@@ -23,31 +23,46 @@ class Building
     false
   end
 
+  def to_s
+    "#{self.class} level: #{@level}"
+  end
+
   def creation_time
-    return nil if @level == self.class::MAX_LEVEL
+    return nil if @level == self.class::MAX_LEVEL || self.class::MAX_LEVEL.nil?
     self.class::BASE_BUILD_TIME * 1.2**(@level) # - 1 No, we need next level
   end
 
-  def build_time
+  def build_time(village)
+    village = village || @village
     # actual build time =
     # [duration of creation]*1.05^(-[level of the village headquarters])
-    level_hq = village.buildings[:headquaters].level
+    level_hq = village.buildings.headquaters.level || 20
     creation_time * 1.05**(-level_hq)
   end
 
-  def build_requirements?
-    has = true
-    BUILD_REQ.each do |building, level|
-      has = @vilage.buildings[building] >= level
-      break if has == false
+  def build_requirements(village)
+    village = village || @village
+    self.class::BUILD_REQ.each do |building, level|
+      has = village.buildings.send(building.to_sym).level >= level
+      return building.to_sym
+    end
+    puts "I (#{self.class}) do#{has ? nil : "n't"} have the requested buildings!" unless has
+    if village.free_population =< self.needs.population
+      puts "I (#{self.class}) need a bigger farm!"
+      return :farm
     end
 
-    has
+    return self.class.underscore.to_sym
   end
 
   def points
     return 0 if @level == 0
     self.class::STAFLE.first(@level).reduce(:+)
+  end
+
+  def needed_population
+    return 0 if @level == 0
+    self.class::NEEDS[:pop].first(@level).reduce(:+)
   end
 
   def level

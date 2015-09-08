@@ -11,7 +11,7 @@ class Village
   attr_reader :loyalty
   attr_reader :build_queue
 
-  def_delegators :@resources, :iron, :clay, :wood, :population
+  def_delegators :@resources, :iron, :clay, :wood
   def_delegators :@buildings, :headquaters, :barracks, :stable, :workshop,
                  :church, :first_church, :academy, :smithy, :rallypoint,
                  :statue, :market, :timber_camp, :clay_pit, :iron_mine,
@@ -38,6 +38,14 @@ class Village
 
   def points
     buildings.values.map(&:points).reduce(:+)
+  end
+
+  def max_population
+    buildings.farm.max_population
+  end
+
+  def free_population
+    max_population - buildings.values.map(&:needed_population).reduce(:+)
   end
 
   def coords

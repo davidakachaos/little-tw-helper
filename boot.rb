@@ -24,3 +24,6 @@ Dir.glob(root + '/core/*', &method(:require))
 Dir.glob(root + '/helpers/*', &method(:require))
 Dir.glob(root + '/buildings/*', &method(:require))
 Dir.glob(root + '/units/*', &method(:require))
+
+@v = Village.new
+@bq = @v.build_queue

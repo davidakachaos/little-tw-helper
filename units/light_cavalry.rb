@@ -15,5 +15,4 @@ class LightCavalry < Unit
   def building_time_factor
     village.buildings[:stable].time_factor
   end
-  
 end

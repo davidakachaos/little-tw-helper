@@ -11,7 +11,7 @@ class Ram < Unit
   SPEED = 30
   CARRY = 0
   BUILD_REQ = { workshop: 1 }
-  
+
   def building_time_factor
     village.buildings[:workshop].time_factor
   end

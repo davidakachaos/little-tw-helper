@@ -80,8 +80,8 @@ class BuildingManager
 
   def production_started_up?
     current('timber_camp').level >= 8 &&
-    current('clay_pit').level >= 8 &&
-    current('iron_mine').level >= 5
+      current('clay_pit').level >= 8 &&
+      current('iron_mine').level >= 5
   end
 
   # priority to build this
@@ -96,9 +96,7 @@ class BuildingManager
     return 0 if real_early_game? && current(bld).a_resource? == false && production_started_up? == false
     # Okay, we got production rolling, we need to think about HQ and such
     # We want to get to stables FAST, we need the scouts
-    if rush_to_stable?
-      prio = 999 if bld == :stable
-    end
+    prio = 999 if bld == :stable if rush_to_stable?
 
     prio
   end

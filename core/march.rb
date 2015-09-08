@@ -7,9 +7,9 @@ class March
     @target = target
     # { ram: 200, spearman: 50, scout: 1 }
     @kinds_in_march = []
-    units.each{|k, amount|
+    units.each do|k, _amount|
       @kinds_in_march << k.classify
-    }
+    end
     @units = units
   end
 

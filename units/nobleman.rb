@@ -11,7 +11,7 @@ class Nobleman < Unit
   SPEED = 35
   CARRY = 0
   BUILD_REQ = { academy: 1 }
-  
+
   def building_time_factor
     village.buildings[:academy].time_factor
   end

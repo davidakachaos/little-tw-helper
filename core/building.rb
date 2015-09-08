@@ -31,7 +31,7 @@ class Building
   def build_time
     # actual build time =
     # [duration of creation]*1.05^(-[level of the village headquarters])
-    level_hq = self.village.buildings[:headquaters].level
+    level_hq = village.buildings[:headquaters].level
     creation_time * 1.05**(-level_hq)
   end
 

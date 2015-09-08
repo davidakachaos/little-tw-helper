@@ -7,12 +7,12 @@ class Unit
   CLAY = 0
   IRON = 0
   POPULATION = 1
-  ATTACK = 0 #The attack strength shows how strong the unit is during an attack.
+  ATTACK = 0 # The attack strength shows how strong the unit is during an attack.
   DEF_INF = 0 # The defensive strength shows how well a unit can defend itself against infantry units.
   DEF_HORSE = 0 # The cavalry defense shows how well a unit can defend itself against cavalry units
   DEF_ARCH = 0 # The archer defense gives the defensive strength of a unit when defending against archers and mounted archers
   SPEED = 0 # Speed: The speed tells you how many minutes this unit needs to cross one field.
-  CARRY = 0 # The haul tells you how much this unit can carry. 
+  CARRY = 0 # The haul tells you how much this unit can carry.
   BUILD_REQ = {}
 
   def initialize(amount: 0)

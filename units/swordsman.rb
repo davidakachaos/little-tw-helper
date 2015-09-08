@@ -11,7 +11,7 @@ class Swordsman < Unit
   SPEED = 22
   CARRY = 15
   BUILD_REQ = { smithy: 1 }
-  
+
   def building_time_factor
     village.buildings[:barracks].time_factor
   end

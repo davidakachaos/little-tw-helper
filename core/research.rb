@@ -20,7 +20,7 @@ class Research
   attr_accessor :researched
 
   def initialize
-    @researched = BASE_TIMES.keys.dup.collect{|e| [e, 0]}.to_h
+    @researched = BASE_TIMES.keys.dup.collect { |e| [e, 0] }.to_h
   end
 
   def done?(research)
@@ -30,14 +30,12 @@ class Research
   def research_time(kind, level)
     if @max_level == 10
       # On a ten tech world, each successive research level takes 1.75 times the duration of the previous level.
-      BASE_TIMES[kind] * 1.75 ** (level - 1)
+      BASE_TIMES[kind] * 1.75**(level - 1)
     elsif @max_level == 3
       # On a 3 tech world, each successive research level takes 3 times the duration of the previous level.
-      BASE_TIMES[kind] * 3 ** (level - 1)
+      BASE_TIMES[kind] * 3**(level - 1)
     else
       BASE_TIMES[kind]
     end
   end
-
-
 end

@@ -11,7 +11,7 @@ class Militia < Unit
   SPEED = 0
   CARRY = 0
   BUILD_REQ = { farm: 1 }
-  
+
   def building_time_factor
     village.buildings[:farm].time_factor
   end

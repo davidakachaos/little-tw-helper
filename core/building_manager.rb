@@ -5,7 +5,7 @@ class BuildingManager
   attr_reader :the_queue
 
   def initialize(village)
-    @village = village
+    @village = village.dup
     @village_buildings = village.buildings.dup
     @target = PerfectBuildings.new
     @currently_building = nil
@@ -63,37 +63,30 @@ class BuildingManager
   # In this method we try to make sure of a good building order
   # Based on the building we have, wich we need an so on
   def guess_next
-    if @currently_building.nil?
-      # Always build a rallypoint first, else we can't send troops!
-      return :rallypoint if current('rallypoint').level < 1
-      return nil if @build_hash.nil? || @build_hash == {}
-      to_build = @build_hash.sort_by { |_n, prop| prop[:priority] } .reverse.first[0]
-      return nil if to_build.nil?
-      # puts "Based on prio: #{to_build} => F:#{current(to_build).level } T:#{current(to_build).level + 1} :: #{current(to_build).class::BUILD_REQ if current(to_build).level < 1 }"
-      return to_build if current(to_build).build_requirements?(@village)
-      # We need to build the requirements first!
-      @currently_building = to_build
-      current(to_build).class::BUILD_REQ.each do |building, level|
-        if current(building).level < level
-          # puts " To build a #{to_build} we need to build a #{building} of level #{level}, we have a level #{current(building).level}"
-          return building
-        end
-      end
-      # puts "We're done! All buildings have finished!"
-      return nil
-    else
-      # We are building prerequests for a building!
-      current(@currently_building).class::BUILD_REQ.each do |building, level|
-        if current(building).level < level
-          # puts " To build a #{@currently_building} we need to build a #{building} of level #{level}, we have a level #{current(building).level}"
-          return building
-        end
-      end
-      to_build = @currently_building
-      @currently_building = nil
-      # puts "Based on prio: #{to_build} => F:#{current(to_build).level } T:#{current(to_build).level + 1} :: #{current(to_build).class::BUILD_REQ if current(to_build).level < 1 }"
-      return to_build
+    # Always build a rallypoint first, else we can't send troops!
+    return :rallypoint if current('rallypoint').level < 1
+    # Need to keep room in the farm
+    return :farm if @village.percentage_free_population < 10.0
+    return :warehouse if @village.percentage_free_storage < 10.0
+    return nil if @build_hash.nil? || @build_hash == {}
+    # Pick a random building to upgrade next, all have the same priority!
+    to_build = get_top(@build_hash.sort_by { |_n, prop| prop[:priority] } .reverse).sample
+    return nil if to_build.nil?
+    needs = current(to_build).build_requirements(@village)
+    return needs if to_build != needs
+    return to_build
+  end
+
+  def get_top(hash)
+    highest = 0
+    top_array = []
+    hash.each do |name, property|
+      break if highest > property[:priority]
+      highest = property[:priority]
+      top_array << name
     end
+
+    top_array
   end
 
   def real_early_game?
@@ -108,9 +101,9 @@ class BuildingManager
   end
 
   def production_started_up?
-    current('timber_camp').level >= 8 &&
-      current('clay_pit').level >= 8 &&
-      current('iron_mine').level >= 5
+    current('timber_camp').level >= 10 &&
+      current('clay_pit').level >= 10 &&
+      current('iron_mine').level >= 7
   end
 
   def production_almost_max?
@@ -128,6 +121,7 @@ class BuildingManager
     prio += 2 if current(bld).a_resource?
     # IronMin is slightly less important then Timber and Clay early game
     prio -= 3 if current(bld).class == IronMine && real_early_game?
+    prio -= 99 if current(bld).class == Farm || current(bld).class == Warehouse
     return 0 if real_early_game? && current(bld).a_resource? == false && production_started_up? == false
     # Okay, we got production rolling, we need to think about HQ and such
     # We want to get to stables FAST, we need the scouts

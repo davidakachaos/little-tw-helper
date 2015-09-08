@@ -30,15 +30,14 @@ class Farm < Building
       30, 39, 50, 64, 83, 107, 138, 178, 230, 297, 383, 494, 637, 822, 1060,
       1368, 1764, 2276, 2936, 3787, 4886, 6302, 8130, 10_488, 13_529, 17_453,
       22_514, 29_043, 37_466, 48_331
-    ],
-    pop: []
+    ]
   }
 
   def max_population
     POPULATION[@level - 1]
   end
 
-  def pop_needed
+  def needed_population
     0
   end
 end

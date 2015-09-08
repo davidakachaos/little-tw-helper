@@ -33,7 +33,7 @@ class Warehouse < Building
     76_604, 94_184, 115_798, 142_373, 175_047, 215_219, 264_611, 325_337, 400_000
   ]
 
-  def pop_needed
+  def needed_population
     0
   end
 

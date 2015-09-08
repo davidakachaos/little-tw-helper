@@ -21,12 +21,16 @@ class Unit
 
   def build_requirements?
     has = true
-    BUILD_REQ.each do |building, level|
+    self.class::BUILD_REQ.each do |building, level|
       has = @vilage.buildings[building] >= level
       break if has == false
     end
 
     has
+  end
+
+  def needed_population
+    self.class::POPULATION * @amount
   end
 
   def to_s

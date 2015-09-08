@@ -44,8 +44,24 @@ class Village
     buildings.farm.max_population
   end
 
+  def max_storage
+    buildings.warehouse.capasity
+  end
+
+  def free_storage
+    max_storage - iron - wood - clay
+  end
+
+  def percentage_free_storage
+    free_storage.to_f / max_storage.to_f * 100.0
+  end
+
   def free_population
-    max_population - buildings.values.map(&:needed_population).reduce(:+)
+    max_population - buildings.values.map(&:needed_population).reduce(:+) - units.values.map(&:needed_population).reduce(:+)
+  end
+
+  def percentage_free_population
+    free_population.to_f / max_population.to_f * 100.0
   end
 
   def coords

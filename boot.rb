@@ -7,6 +7,16 @@ class String
   def titleize
     split('_').map(&:capitalize).join
   end
+
+  def underscore
+  	word = self.dup
+	word.gsub!(/([A-Z\d]+)([A-Z][a-z])/,'\1_\2')
+	word.gsub!(/([a-z\d])([A-Z])/,'\1_\2')
+	word.gsub!("-", "_")
+	word.downcase!
+	
+	word
+  end
 end
 
 # Open the symbol class to add some methods
